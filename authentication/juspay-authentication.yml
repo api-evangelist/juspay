@@ -1,0 +1,20 @@
+generated: '2026-07-12'
+method: derived
+source: openapi/juspay-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: basicAuth
+  type: http
+  scheme: basic
+  description: >-
+    HTTP Basic authentication. The API key issued in the Juspay dashboard is the
+    username and the password is an empty string; the `username:` pair is
+    Base64-encoded into `Authorization: Basic <credentials>`. Requests also
+    require an `x-merchantid` header, and Juspay recommends an `x-routing-id`
+    header (typically the customer_id) to pin the payment session lifecycle.
+    Client-side SDK calls instead use a short-lived (15-minute) client auth
+    token minted by the create-order or get/create-customer endpoints.
+  sources:
+  - openapi/juspay-openapi.yml

@@ -1,0 +1,147 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Juspay Express Checkout API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{apiKey}}",
+      "password": ""
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "Orders", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create an order.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.juspay.in/orders",
+            "headers": [
+              { "name": "x-merchantid", "value": "{{merchantId}}" },
+              { "name": "Content-Type", "value": "application/x-www-form-urlencoded" }
+            ],
+            "body": { "type": "text", "data": "order_id=order_001&amount=100.00&currency=INR&customer_id=cust_00000001" }
+          },
+          "docs": "Creates an order, the unit a payment is attached to."
+        },
+        {
+          "info": { "name": "Get order status.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.juspay.in/orders/:order_id",
+            "headers": [{ "name": "x-merchantid", "value": "{{merchantId}}" }],
+            "params": [
+              { "name": "order_id", "value": "order_001", "type": "path", "description": "The order identifier." }
+            ]
+          },
+          "docs": "Retrieves an order's status. CHARGED indicates a successful payment."
+        },
+        {
+          "info": { "name": "Get order status (encrypted V4).", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.juspay.in/v4/order-status",
+            "headers": [
+              { "name": "x-merchantid", "value": "{{merchantId}}" },
+              { "name": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "type": "json", "data": "{}" }
+          },
+          "docs": "Encrypted (JWE/JWT) order-status variant."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Transactions", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a transaction.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.juspay.in/txns",
+            "headers": [
+              { "name": "x-merchantid", "value": "{{merchantId}}" },
+              { "name": "Content-Type", "value": "application/x-www-form-urlencoded" }
+            ],
+            "body": { "type": "text", "data": "order_id=order_001&payment_method_type=UPI&format=json" }
+          },
+          "docs": "Server-to-server transaction processing against an order."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Session", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a payment session.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.juspay.in/session",
+            "headers": [
+              { "name": "x-merchantid", "value": "{{merchantId}}" },
+              { "name": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "type": "json", "data": "{\n  \"order_id\": \"order_001\",\n  \"amount\": \"100.00\",\n  \"customer_id\": \"cust_00000001\",\n  \"action\": \"paymentPage\"\n}" }
+          },
+          "docs": "Creates a Hyper Checkout / HyperSDK session and returns an SDK payload and payment links."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Refunds", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Refund an order.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.juspay.in/orders/:order_id/refunds",
+            "headers": [
+              { "name": "x-merchantid", "value": "{{merchantId}}" },
+              { "name": "Content-Type", "value": "application/x-www-form-urlencoded" }
+            ],
+            "params": [
+              { "name": "order_id", "value": "order_001", "type": "path", "description": "The order identifier." }
+            ],
+            "body": { "type": "text", "data": "unique_request_id=refund_001&amount=100.00" }
+          },
+          "docs": "Creates a refund for a CHARGED order."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Customers", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a customer.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.juspay.in/customers",
+            "headers": [
+              { "name": "x-merchantid", "value": "{{merchantId}}" },
+              { "name": "Content-Type", "value": "application/x-www-form-urlencoded" }
+            ],
+            "body": { "type": "text", "data": "customer_id=cust_00000001&mobile_number=9000000000&email_address=customer@example.com" }
+          },
+          "docs": "Creates a customer. customer_id should be at least 8 characters and unique."
+        },
+        {
+          "info": { "name": "Get a customer.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.juspay.in/customers/:customer_id",
+            "headers": [{ "name": "x-merchantid", "value": "{{merchantId}}" }],
+            "params": [
+              { "name": "customer_id", "value": "cust_00000001", "type": "path", "description": "The customer identifier." }
+            ]
+          },
+          "docs": "Retrieves a customer by id; can also return a client auth token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

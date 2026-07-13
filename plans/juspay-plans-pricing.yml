@@ -1,0 +1,104 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Juspay
+providerId: juspay
+created: '2026-07-12'
+modified: '2026-07-12'
+reconciled: false
+tags:
+- Payments
+- Payment Orchestration
+- Checkout
+- India
+- Fintech
+- Plans
+description: >-
+  Juspay does not publish a public self-serve pricing table for its payments
+  orchestration, checkout, and HyperSDK products. Access is enterprise /
+  merchant-onboarding based: a merchant signs up, is provisioned with sandbox
+  and production credentials (API key + merchant id), and pricing is agreed
+  commercially - typically as a per-transaction / orchestration fee negotiated
+  by volume and product mix, layered on top of the underlying acquirer or
+  aggregator MDR. Note that in India NPCI mandates zero MDR on bank-to-bank UPI.
+  A public pricing page (juspay.io/in/pricing) is referenced but returns 404 as
+  of the review date, so no numeric tiers are reconciled here.
+notes: >-
+  Tiers below are modeled to reflect Juspay's onboarding-based access model and
+  are NOT confirmed numeric plans. Verify commercial terms directly with Juspay
+  sales during reconciliation.
+sources:
+- https://juspay.io/in
+- https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction
+plans:
+- id: juspay-sandbox
+  name: Sandbox
+  type: free
+  description: >-
+    Test environment at https://sandbox.juspay.in for integrating and validating
+    the Express Checkout / PG APIs and HyperSDK before go-live. No live money
+    movement; provisioned during merchant onboarding.
+  entries:
+  - label: Sandbox Access
+    name: sandbox_access
+    type: flat
+    metric: environment
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included with onboarding
+    userMultiplied: false
+  elements:
+  - name: Express Checkout / PG APIs
+  - name: HyperSDK / Hyper Checkout
+  - name: Test Credentials
+- id: juspay-production
+  name: Production (Merchant)
+  type: usage
+  description: >-
+    Live production access at https://api.juspay.in with a per-transaction /
+    orchestration commercial model negotiated with Juspay. Covers payment
+    orchestration and smart routing across gateways, UPI, cards, netbanking, and
+    wallets, plus refunds, webhooks, and reconciliation.
+  entries:
+  - label: Per-Transaction Orchestration Fee
+    name: per_transaction_fee
+    type: usage
+    metric: transactions
+    limit: -1
+    timeFrame: month
+    geo: IN
+    unit: 1
+    price: negotiated per-transaction (not public)
+    userMultiplied: false
+  elements:
+  - name: Payment Orchestration and Smart Routing
+  - name: All Payment Methods (UPI, Cards, Netbanking, Wallets)
+  - name: Refunds and Webhooks
+  - name: Reconciliation
+- id: juspay-enterprise
+  name: Enterprise / Platform
+  type: enterprise
+  description: >-
+    Custom agreements for large merchants, banks, and card networks - full
+    payments operating system, orchestration at scale, dedicated support, SLAs,
+    and security/compliance commitments (PCI DSS). Contact Juspay.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Custom Volume Pricing
+  - name: Dedicated Support and SLAs
+  - name: Bank and Network Solutions
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

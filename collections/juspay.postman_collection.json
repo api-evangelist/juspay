@@ -1,0 +1,176 @@
+{
+  "info": {
+    "name": "Juspay Express Checkout API",
+    "description": "Server-to-server REST API for the Juspay payments orchestration and checkout platform. Create and track orders, process transactions across cards/UPI/netbanking/wallets, issue refunds, manage customers, and create Hyper Checkout / HyperSDK sessions. Base URL: https://api.juspay.in (production) or https://sandbox.juspay.in (sandbox). Auth is HTTP Basic with the API key as username and an empty password, plus an x-merchantid header. Paths grounded in Juspay public docs (2026-07-12); bodies are illustrative.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "basic",
+    "basic": [
+      { "key": "username", "value": "{{apiKey}}", "type": "string" },
+      { "key": "password", "value": "", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.juspay.in", "type": "string" },
+    { "key": "apiKey", "value": "", "type": "string" },
+    { "key": "merchantId", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create an order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-merchantid", "value": "{{merchantId}}" },
+              { "key": "x-routing-id", "value": "{{customerId}}" },
+              { "key": "Content-Type", "value": "application/x-www-form-urlencoded" }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "order_id", "value": "order_001" },
+                { "key": "amount", "value": "100.00" },
+                { "key": "currency", "value": "INR" },
+                { "key": "customer_id", "value": "cust_00000001" }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/orders", "host": ["{{baseUrl}}"], "path": ["orders"] },
+            "description": "Creates an order, the unit a payment is attached to."
+          }
+        },
+        {
+          "name": "Get order status",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-merchantid", "value": "{{merchantId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/orders/:order_id", "host": ["{{baseUrl}}"], "path": ["orders", ":order_id"], "variable": [{ "key": "order_id", "value": "order_001" }] },
+            "description": "Retrieves an order's status. CHARGED indicates a successful payment."
+          }
+        },
+        {
+          "name": "Get order status (encrypted V4)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-merchantid", "value": "{{merchantId}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": { "raw": "{{baseUrl}}/v4/order-status", "host": ["{{baseUrl}}"], "path": ["v4", "order-status"] },
+            "description": "Encrypted (JWE/JWT) order-status variant."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Create a transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-merchantid", "value": "{{merchantId}}" },
+              { "key": "x-routing-id", "value": "{{customerId}}" },
+              { "key": "Content-Type", "value": "application/x-www-form-urlencoded" }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "order_id", "value": "order_001" },
+                { "key": "payment_method_type", "value": "UPI" },
+                { "key": "format", "value": "json" }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/txns", "host": ["{{baseUrl}}"], "path": ["txns"] },
+            "description": "Server-to-server transaction processing against an order."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Session",
+      "item": [
+        {
+          "name": "Create a payment session",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-merchantid", "value": "{{merchantId}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"order_id\": \"order_001\",\n  \"amount\": \"100.00\",\n  \"customer_id\": \"cust_00000001\",\n  \"action\": \"paymentPage\",\n  \"return_url\": \"https://merchant.example/return\"\n}" },
+            "url": { "raw": "{{baseUrl}}/session", "host": ["{{baseUrl}}"], "path": ["session"] },
+            "description": "Creates a Hyper Checkout / HyperSDK session and returns an SDK payload and payment links."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Refunds",
+      "item": [
+        {
+          "name": "Refund an order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-merchantid", "value": "{{merchantId}}" },
+              { "key": "Content-Type", "value": "application/x-www-form-urlencoded" }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "unique_request_id", "value": "refund_001" },
+                { "key": "amount", "value": "100.00" }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/orders/:order_id/refunds", "host": ["{{baseUrl}}"], "path": ["orders", ":order_id", "refunds"], "variable": [{ "key": "order_id", "value": "order_001" }] },
+            "description": "Creates a refund for a CHARGED order."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "Create a customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-merchantid", "value": "{{merchantId}}" },
+              { "key": "Content-Type", "value": "application/x-www-form-urlencoded" }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "customer_id", "value": "cust_00000001" },
+                { "key": "mobile_number", "value": "9000000000" },
+                { "key": "email_address", "value": "customer@example.com" }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/customers", "host": ["{{baseUrl}}"], "path": ["customers"] },
+            "description": "Creates a customer. customer_id should be at least 8 characters and unique."
+          }
+        },
+        {
+          "name": "Get a customer",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-merchantid", "value": "{{merchantId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/customers/:customer_id", "host": ["{{baseUrl}}"], "path": ["customers", ":customer_id"], "variable": [{ "key": "customer_id", "value": "cust_00000001" }] },
+            "description": "Retrieves a customer by id; can also return a client auth token."
+          }
+        }
+      ]
+    }
+  ]
+}

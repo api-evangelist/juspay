@@ -1,0 +1,95 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Juspay
+providerId: juspay
+created: '2026-07-12'
+modified: '2026-07-12'
+reconciled: false
+tags:
+- Payments
+- Payment Orchestration
+- Checkout
+- India
+- Fintech
+- FinOps
+- Cost Management
+description: >-
+  FinOps view of Juspay spend. Juspay is a payments orchestration and checkout
+  platform; cost is not a self-serve subscription but a negotiated commercial
+  arrangement per merchant, generally driven by transaction volume and product
+  mix (orchestration/routing, checkout, HyperSDK) and layered on top of the
+  underlying acquirer/aggregator MDR that actually settles the funds. In India,
+  bank-to-bank UPI carries zero MDR by NPCI mandate, so method mix (UPI vs cards
+  vs netbanking vs wallets) materially changes blended cost per order. Juspay
+  does not publish public per-transaction rates, so no per-unit rates are
+  reconciled here.
+notes: >-
+  Per-transaction and orchestration rates are not reconciled - they are set by
+  the Juspay commercial agreement. Model total payments cost as Juspay's
+  orchestration/platform fee PLUS the downstream gateway/acquirer MDR and any
+  network/scheme fees, and track method mix as a primary cost driver.
+sources:
+- https://juspay.io/in
+- https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Juspay
+serviceCategory: Payments and Financial Infrastructure
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: INR
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: Juspay Payments Orchestration
+  ServiceCategory: Payments and Financial Infrastructure
+  ProviderName: Juspay
+  PublisherName: Juspay
+  InvoiceIssuerName: Juspay
+  BillingCurrency: INR
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: transactions_processed
+  description: Payment transactions orchestrated/processed through Juspay, the primary billing driver (rate negotiated, not public).
+  unit: transactions
+  aggregation: sum
+  dimensions:
+  - merchant
+  - payment_method
+  - gateway
+- name: refunds_processed
+  description: Refunds issued through the platform; instant refunds may carry different economics than standard refunds.
+  unit: transactions
+  aggregation: sum
+  dimensions:
+  - merchant
+  - refund_type
+- name: settled_volume
+  description: Gross rupee volume settled, against which downstream acquirer/aggregator MDR applies.
+  unit: currency
+  aggregation: sum
+  dimensions:
+  - merchant
+  - payment_method
+principles:
+- name: Visibility
+  description: Track transaction count and settled volume by payment method and gateway; separate Juspay's orchestration fee from downstream MDR and scheme fees.
+- name: Allocation
+  description: Attribute payment cost per merchant entity, product line, and payment method so blended cost-per-order is visible to each team.
+- name: Optimization
+  description: Use smart routing to steer to lower-cost gateways, and account for zero-MDR UPI when shaping method mix and checkout defaults.
+- name: Accountability
+  description: Review monthly transaction economics against the Juspay agreement and downstream acquirer invoices; watch method-mix shifts that move blended cost.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

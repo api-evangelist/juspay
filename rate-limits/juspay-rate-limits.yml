@@ -1,0 +1,59 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Juspay
+providerId: juspay
+created: '2026-07-12'
+modified: '2026-07-12'
+reconciled: false
+tags:
+- Payments
+- Payment Orchestration
+- Checkout
+- India
+- Rate Limiting
+- Quotas
+description: >-
+  Juspay does not publish fixed numeric rate limits for its Express Checkout /
+  PG REST APIs in the public developer documentation. As an enterprise payments
+  platform, throughput is governed per-merchant by the commercial agreement and
+  by the underlying acquirer/gateway capacity rather than by a documented
+  per-minute request cap. Integrations should implement idempotency (the
+  refund `unique_request_id` is an example of a client-supplied idempotency
+  key), retries with exponential backoff, and asynchronous webhook-driven
+  reconciliation rather than tight polling of order status.
+notes: >-
+  No numeric per-account or per-endpoint limits are documented as of the review
+  date. Confirm any production throughput ceilings and burst behavior with
+  Juspay during onboarding.
+sources:
+- https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction
+- https://juspay.io/in/docs/api-reference/docs/express-checkout/order-status-api
+responseCodes:
+  throttled: 429
+limits:
+- name: Express Checkout API Requests
+  scope: merchant
+  metric: requests
+  limit: not published
+  notes: No fixed numeric request-rate limit is documented for the REST APIs.
+- name: Order Status Polling
+  scope: merchant
+  metric: requests
+  limit: not published
+  notes: Prefer webhooks over aggressive polling of GET /orders/{order_id}.
+- name: Production Throughput
+  scope: merchant
+  metric: transactions
+  limit: per agreement
+  notes: Governed by the commercial contract and downstream gateway capacity.
+policies:
+- name: Idempotency
+  description: Refunds require a unique_request_id that cannot be reused across different refund requests, preventing duplicate refunds on retry.
+- name: Webhook-Driven Reconciliation
+  description: Juspay pushes server-to-server webhook notifications after each payment/refund event; rely on these plus order status rather than tight polling.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor Retry-After on 429 responses.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

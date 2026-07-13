@@ -1,0 +1,104 @@
+aid: juspay
+name: Juspay
+review:
+  question: Does Juspay expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-12'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. Juspay's public server-to-server surface
+    (Express Checkout / PG REST APIs and the Hyper Checkout session API) is
+    request/response REST over HTTPS. Asynchronous payment/refund outcomes are
+    delivered by Juspay POSTing server-to-server webhook notifications to a
+    merchant-configured endpoint - a server-to-endpoint HTTP callback, not a
+    WebSocket or SSE stream on Juspay's own API. There is no documented
+    server-push transport on Juspay's API to model, so no asyncapi/ directory
+    was created.
+findings:
+  summary: |
+    Juspay does not publish a documented public WebSocket API. Juspay is an
+    Indian payments orchestration and checkout platform. Its documented public
+    API is the server-to-server Express Checkout / PG REST API (plus the Hyper
+    Checkout session API), served from a production host (https://api.juspay.in)
+    and a sandbox host (https://sandbox.juspay.in). Requests authenticate with
+    an API key over HTTP Basic (API key as username, empty password) plus an
+    x-merchantid header. Asynchronous notification of payment and refund events
+    is delivered via merchant-configured HTTP webhooks, not a WebSocket. No
+    realtime, bidirectional, or streaming WebSocket (ws:// or wss://) endpoint
+    is documented on Juspay's API as of the review date.
+  accessModel: |
+    Access is enterprise / merchant-onboarding based. A merchant is provisioned
+    with an API key and merchant id and integrates against sandbox first, then
+    production. There is no public self-serve signup or public pricing table
+    (juspay.io/in/pricing returns 404 as of the review date). SDKs (HyperSDK /
+    Hyper Checkout) and official server SDKs (e.g. the .NET expresscheckout SDK)
+    wrap the same REST API.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.juspay.in
+      documented: true
+      note: Express Checkout / PG APIs. Sandbox base is https://sandbox.juspay.in.
+    - protocol: Webhook
+      scheme: https
+      documented: true
+      note: Server-to-server payment/refund event notifications POSTed to a merchant-configured HTTP endpoint. Not WebSocket.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented anywhere in Juspay's Express Checkout / Hyper Checkout reference as of the review date.
+  endpointsConfirmedRest:
+    - POST https://api.juspay.in/orders
+    - GET  https://api.juspay.in/orders/{order_id}
+    - POST https://api.juspay.in/v4/order-status
+    - POST https://api.juspay.in/txns
+    - POST https://api.juspay.in/session
+    - POST https://api.juspay.in/orders/{order_id}/refunds
+    - POST https://api.juspay.in/customers
+    - GET  https://api.juspay.in/customers/{customer_id}
+  endpointsModeled:
+    - note: >-
+        Request and response bodies in the OpenAPI are modeled from documented
+        parameters and are not exhaustive. The Order.status enum, TransactionInput,
+        and SessionInput field sets in particular are illustrative and should be
+        reconciled against the live reference.
+    - note: >-
+        Juspay's catalog is broader than the eight endpoints modeled here (it
+        includes cards/tokenization, UPI, mandates, payouts, and merchant payment
+        methods). Only endpoints whose method + path were confirmed in the public
+        docs were included; others were intentionally omitted rather than fabricated.
+sources:
+  - url: https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction
+    type: Documentation
+    note: Express Checkout API overview; base hosts (api.juspay.in / sandbox.juspay.in), HTTP Basic auth, x-merchantid, POST /txns noted as auth-exempt.
+  - url: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
+    type: APIReference
+    note: POST /orders; HTTP Basic (API key as username, empty password), x-merchantid + x-routing-id headers, form-urlencoded body.
+  - url: https://juspay.io/in/docs/api-reference/docs/express-checkout/order-status-api
+    type: APIReference
+    note: GET /orders/{order_id} and encrypted POST /v4/order-status. CHARGED means success.
+  - url: https://juspay.io/in/docs/api-reference/docs/express-checkout/refund-order-api
+    type: APIReference
+    note: POST /orders/{order_id}/refunds; unique_request_id + amount; STANDARD/INSTANT/INSTANT_WITH_FALLBACK.
+  - url: https://juspay.io/in/docs/api-reference/docs/express-checkout/createcustomer
+    type: APIReference
+    note: POST /customers; customer_id min 8 chars, unique. Can return a 15-minute client auth token.
+  - url: https://juspay.io/in/docs/api-reference/docs/express-checkout/getcustomer
+    type: APIReference
+    note: GET /customers/{customer_id}.
+  - url: https://juspay.io/in/docs/hyper-checkout/web/base-sdk-integration/session
+    type: Documentation
+    note: POST /session returns an SDK payload and payment links for Hyper Checkout / HyperSDK.
+  - url: https://github.com/juspay
+    type: SourceCode
+    note: Juspay GitHub org hosts official server SDKs (e.g. expresscheckout-dotnet-sdk) wrapping the same REST API.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists. Juspay's own public API is
+    request/response REST (Express Checkout / PG + Hyper Checkout session),
+    with asynchronous outcomes delivered by HTTP webhooks. No AsyncAPI document
+    was created because there is no server-push transport (WebSocket or SSE) on
+    Juspay's own API to model.
