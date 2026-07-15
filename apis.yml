@@ -117,6 +117,8 @@ apis:
     (GET /customers/{customer_id}). Get/create customer can also mint a
     15-minute client auth token used for client-side SDK authentication.
 common:
+- type: AgenticAccess
+  url: agentic-access/juspay-agentic-access.yml
 - type: DomainSecurity
   url: security/juspay-domain-security.yml
 - type: Authentication
