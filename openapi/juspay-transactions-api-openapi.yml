@@ -1,0 +1,103 @@
+openapi: 3.0.3
+info:
+  title: Juspay Express Checkout Customers Transactions API
+  description: 'Server-to-server REST API for the Juspay payments orchestration and checkout platform. Merchants create and track orders, process transactions across payment methods (cards, UPI, netbanking, wallets), issue refunds, manage customers, and initialize the Hyper Checkout / HyperSDK drop-in checkout via a payment session. Requests authenticate with an API key over HTTP Basic (API key as the username, empty password) plus an `x-merchantid` header; Juspay recommends passing an `x-routing-id` (typically the customer id) to pin the payment session lifecycle. Most write endpoints accept `application/x-www-form-urlencoded` bodies.
+
+    Endpoint paths and methods below are grounded in Juspay''s public Express Checkout / Hyper Checkout documentation as of 2026-07-12. Request and response schemas are modeled from the documented parameters and are marked where fields are illustrative rather than exhaustive; verify against the live reference before production use.'
+  version: '1.0'
+  contact:
+    name: Juspay
+    url: https://juspay.io/in
+servers:
+- url: https://api.juspay.in
+  description: Production
+- url: https://sandbox.juspay.in
+  description: Sandbox
+security:
+- basicAuth: []
+tags:
+- name: Transactions
+  description: Server-to-server transaction processing against an order.
+paths:
+  /txns:
+    post:
+      operationId: createTransaction
+      tags:
+      - Transactions
+      summary: Create a transaction
+      description: Server-to-server transaction endpoint that processes a payment against an existing order with a chosen payment method (card, UPI, netbanking, wallet). Documented as exempt from the standard order authentication flow. Body fields below are modeled from the documented flow and are not exhaustive.
+      parameters:
+      - $ref: '#/components/parameters/MerchantId'
+      - $ref: '#/components/parameters/RoutingId'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TransactionInput'
+      responses:
+        '200':
+          description: Transaction result / next action.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  parameters:
+    RoutingId:
+      name: x-routing-id
+      in: header
+      required: false
+      description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
+      schema:
+        type: string
+    MerchantId:
+      name: x-merchantid
+      in: header
+      required: true
+      description: Merchant ID issued by Juspay.
+      schema:
+        type: string
+  schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        error_code:
+          type: string
+        error_message:
+          type: string
+    TransactionInput:
+      type: object
+      required:
+      - order_id
+      - payment_method_type
+      properties:
+        order_id:
+          type: string
+        payment_method_type:
+          type: string
+          description: e.g. CARD, UPI, NB (netbanking), WALLET.
+        payment_method:
+          type: string
+        redirect_after_payment:
+          type: boolean
+        format:
+          type: string
+          description: Response format, e.g. json.
+  responses:
+    Unauthorized:
+      description: Missing or invalid credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: 'HTTP Basic authentication. The API key is the username and the password is an empty string; the pair is Base64-encoded into `Authorization: Basic <credentials>`. An `x-merchantid` header is also required on requests.'

@@ -1,0 +1,227 @@
+openapi: 3.0.3
+info:
+  title: Juspay Express Checkout Customers Orders API
+  description: 'Server-to-server REST API for the Juspay payments orchestration and checkout platform. Merchants create and track orders, process transactions across payment methods (cards, UPI, netbanking, wallets), issue refunds, manage customers, and initialize the Hyper Checkout / HyperSDK drop-in checkout via a payment session. Requests authenticate with an API key over HTTP Basic (API key as the username, empty password) plus an `x-merchantid` header; Juspay recommends passing an `x-routing-id` (typically the customer id) to pin the payment session lifecycle. Most write endpoints accept `application/x-www-form-urlencoded` bodies.
+
+    Endpoint paths and methods below are grounded in Juspay''s public Express Checkout / Hyper Checkout documentation as of 2026-07-12. Request and response schemas are modeled from the documented parameters and are marked where fields are illustrative rather than exhaustive; verify against the live reference before production use.'
+  version: '1.0'
+  contact:
+    name: Juspay
+    url: https://juspay.io/in
+servers:
+- url: https://api.juspay.in
+  description: Production
+- url: https://sandbox.juspay.in
+  description: Sandbox
+security:
+- basicAuth: []
+tags:
+- name: Orders
+  description: Create orders and read order status.
+paths:
+  /orders:
+    post:
+      operationId: createOrder
+      tags:
+      - Orders
+      summary: Create an order
+      description: Creates an order, the unit a payment is attached to. Returns an order reference (and, when requested via options.get_client_auth_token, a client auth token for SDK use).
+      parameters:
+      - $ref: '#/components/parameters/MerchantId'
+      - $ref: '#/components/parameters/RoutingId'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateOrderInput'
+      responses:
+        '200':
+          description: The created order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /orders/{order_id}:
+    parameters:
+    - $ref: '#/components/parameters/OrderId'
+    get:
+      operationId: getOrderStatus
+      tags:
+      - Orders
+      summary: Get order status
+      description: Retrieves the status and details of an order by its id. A transaction is successful only when `status` is CHARGED.
+      parameters:
+      - $ref: '#/components/parameters/MerchantId'
+      - $ref: '#/components/parameters/RoutingId'
+      responses:
+        '200':
+          description: The order and its current status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v4/order-status:
+    post:
+      operationId: getOrderStatusV4
+      tags:
+      - Orders
+      summary: Get order status (encrypted V4)
+      description: Encrypted (JWE/JWT) variant of order status. Accepts an encrypted payload as a request body (POST) or query parameter (GET) and returns the order status. Modeled from documentation; encrypted payload schema not expanded here.
+      parameters:
+      - $ref: '#/components/parameters/MerchantId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: The order status (encrypted response envelope).
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        order_id:
+          type: string
+        status:
+          type: string
+          description: Order status; CHARGED indicates a successful payment.
+          enum:
+          - NEW
+          - PENDING_VBV
+          - AUTHORIZING
+          - CHARGED
+          - AUTHENTICATION_FAILED
+          - AUTHORIZATION_FAILED
+          - JUSPAY_DECLINED
+          - REFUNDED
+          - PARTIAL_REFUNDED
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        payment_links:
+          type: object
+          additionalProperties: true
+        refunds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Refund'
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        error_code:
+          type: string
+        error_message:
+          type: string
+    Refund:
+      type: object
+      properties:
+        unique_request_id:
+          type: string
+        amount:
+          type: number
+          format: double
+        status:
+          type: string
+        ref:
+          type: string
+    CreateOrderInput:
+      type: object
+      required:
+      - order_id
+      - amount
+      properties:
+        order_id:
+          type: string
+          description: Unique alphanumeric identifier, under 21 characters.
+        amount:
+          type: number
+          format: double
+          description: Payment amount with up to two decimal places.
+        currency:
+          type: string
+          default: INR
+          description: ISO currency code.
+        customer_id:
+          type: string
+          description: Merchant's customer identifier (empty string for guests).
+        customer_email:
+          type: string
+        customer_phone:
+          type: string
+        description:
+          type: string
+        return_url:
+          type: string
+          format: uri
+        product_id:
+          type: string
+        gateway_id:
+          type: integer
+        metadata:
+          type: object
+          additionalProperties: true
+        options.get_client_auth_token:
+          type: boolean
+          description: Request a client auth token for SDK use.
+  parameters:
+    RoutingId:
+      name: x-routing-id
+      in: header
+      required: false
+      description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
+      schema:
+        type: string
+    MerchantId:
+      name: x-merchantid
+      in: header
+      required: true
+      description: Merchant ID issued by Juspay.
+      schema:
+        type: string
+    OrderId:
+      name: order_id
+      in: path
+      required: true
+      description: Unique alphanumeric order identifier (up to 21 characters).
+      schema:
+        type: string
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: 'HTTP Basic authentication. The API key is the username and the password is an empty string; the pair is Base64-encoded into `Authorization: Basic <credentials>`. An `x-merchantid` header is also required on requests.'

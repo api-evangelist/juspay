@@ -1,0 +1,141 @@
+openapi: 3.0.3
+info:
+  title: Juspay Express Checkout Customers API
+  description: 'Server-to-server REST API for the Juspay payments orchestration and checkout platform. Merchants create and track orders, process transactions across payment methods (cards, UPI, netbanking, wallets), issue refunds, manage customers, and initialize the Hyper Checkout / HyperSDK drop-in checkout via a payment session. Requests authenticate with an API key over HTTP Basic (API key as the username, empty password) plus an `x-merchantid` header; Juspay recommends passing an `x-routing-id` (typically the customer id) to pin the payment session lifecycle. Most write endpoints accept `application/x-www-form-urlencoded` bodies.
+
+    Endpoint paths and methods below are grounded in Juspay''s public Express Checkout / Hyper Checkout documentation as of 2026-07-12. Request and response schemas are modeled from the documented parameters and are marked where fields are illustrative rather than exhaustive; verify against the live reference before production use.'
+  version: '1.0'
+  contact:
+    name: Juspay
+    url: https://juspay.io/in
+servers:
+- url: https://api.juspay.in
+  description: Production
+- url: https://sandbox.juspay.in
+  description: Sandbox
+security:
+- basicAuth: []
+tags:
+- name: Customers
+  description: Create and retrieve customers.
+paths:
+  /customers:
+    post:
+      operationId: createCustomer
+      tags:
+      - Customers
+      summary: Create a customer
+      description: Creates a customer. `customer_id` should be at least 8 characters and unique (typically an email, mobile number, or internal id). Can return a 15-minute client auth token for client-side SDK authentication.
+      parameters:
+      - $ref: '#/components/parameters/MerchantId'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerInput'
+      responses:
+        '200':
+          description: The created customer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{customer_id}:
+    parameters:
+    - name: customer_id
+      in: path
+      required: true
+      description: The merchant's unique customer identifier.
+      schema:
+        type: string
+    get:
+      operationId: getCustomer
+      tags:
+      - Customers
+      summary: Get a customer
+      description: Retrieves a customer by id. Can also return a client auth token.
+      parameters:
+      - $ref: '#/components/parameters/MerchantId'
+      responses:
+        '200':
+          description: The requested customer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        error_code:
+          type: string
+        error_message:
+          type: string
+    CustomerInput:
+      type: object
+      required:
+      - customer_id
+      properties:
+        customer_id:
+          type: string
+          description: Unique customer id, at least 8 characters.
+        mobile_number:
+          type: string
+        email_address:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        mobile_country_code:
+          type: string
+        options.get_client_auth_token:
+          type: boolean
+    Customer:
+      allOf:
+      - $ref: '#/components/schemas/CustomerInput'
+      - type: object
+        properties:
+          id:
+            type: string
+            description: Juspay-assigned customer object id.
+          juspay:
+            type: object
+            additionalProperties: true
+            description: Container for a returned client_auth_token, when requested.
+  parameters:
+    MerchantId:
+      name: x-merchantid
+      in: header
+      required: true
+      description: Merchant ID issued by Juspay.
+      schema:
+        type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: 'HTTP Basic authentication. The API key is the username and the password is an empty string; the pair is Base64-encoded into `Authorization: Basic <credentials>`. An `x-merchantid` header is also required on requests.'

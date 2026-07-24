@@ -1,0 +1,110 @@
+openapi: 3.0.3
+info:
+  title: Juspay Express Checkout Customers Session API
+  description: 'Server-to-server REST API for the Juspay payments orchestration and checkout platform. Merchants create and track orders, process transactions across payment methods (cards, UPI, netbanking, wallets), issue refunds, manage customers, and initialize the Hyper Checkout / HyperSDK drop-in checkout via a payment session. Requests authenticate with an API key over HTTP Basic (API key as the username, empty password) plus an `x-merchantid` header; Juspay recommends passing an `x-routing-id` (typically the customer id) to pin the payment session lifecycle. Most write endpoints accept `application/x-www-form-urlencoded` bodies.
+
+    Endpoint paths and methods below are grounded in Juspay''s public Express Checkout / Hyper Checkout documentation as of 2026-07-12. Request and response schemas are modeled from the documented parameters and are marked where fields are illustrative rather than exhaustive; verify against the live reference before production use.'
+  version: '1.0'
+  contact:
+    name: Juspay
+    url: https://juspay.io/in
+servers:
+- url: https://api.juspay.in
+  description: Production
+- url: https://sandbox.juspay.in
+  description: Sandbox
+security:
+- basicAuth: []
+tags:
+- name: Session
+  description: Create a payment session for the Hyper Checkout / HyperSDK.
+paths:
+  /session:
+    post:
+      operationId: createSession
+      tags:
+      - Session
+      summary: Create a payment session
+      description: Creates a payment session for the Hyper Checkout / HyperSDK. Accepts order parameters and returns an SDK payload and payment links used to initialize the drop-in checkout on web or mobile.
+      parameters:
+      - $ref: '#/components/parameters/MerchantId'
+      - $ref: '#/components/parameters/RoutingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionInput'
+      responses:
+        '200':
+          description: SDK payload and payment links for the session.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  parameters:
+    RoutingId:
+      name: x-routing-id
+      in: header
+      required: false
+      description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
+      schema:
+        type: string
+    MerchantId:
+      name: x-merchantid
+      in: header
+      required: true
+      description: Merchant ID issued by Juspay.
+      schema:
+        type: string
+  schemas:
+    SessionInput:
+      type: object
+      required:
+      - order_id
+      - amount
+      - customer_id
+      properties:
+        order_id:
+          type: string
+        amount:
+          type: number
+          format: double
+        customer_id:
+          type: string
+        currency:
+          type: string
+          default: INR
+        return_url:
+          type: string
+          format: uri
+        payment_page_client_id:
+          type: string
+        action:
+          type: string
+          description: e.g. paymentPage.
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        error_code:
+          type: string
+        error_message:
+          type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: 'HTTP Basic authentication. The API key is the username and the password is an empty string; the pair is Base64-encoded into `Authorization: Basic <credentials>`. An `x-merchantid` header is also required on requests.'

@@ -1,0 +1,164 @@
+openapi: 3.0.3
+info:
+  title: Juspay Express Checkout Customers Refunds API
+  description: 'Server-to-server REST API for the Juspay payments orchestration and checkout platform. Merchants create and track orders, process transactions across payment methods (cards, UPI, netbanking, wallets), issue refunds, manage customers, and initialize the Hyper Checkout / HyperSDK drop-in checkout via a payment session. Requests authenticate with an API key over HTTP Basic (API key as the username, empty password) plus an `x-merchantid` header; Juspay recommends passing an `x-routing-id` (typically the customer id) to pin the payment session lifecycle. Most write endpoints accept `application/x-www-form-urlencoded` bodies.
+
+    Endpoint paths and methods below are grounded in Juspay''s public Express Checkout / Hyper Checkout documentation as of 2026-07-12. Request and response schemas are modeled from the documented parameters and are marked where fields are illustrative rather than exhaustive; verify against the live reference before production use.'
+  version: '1.0'
+  contact:
+    name: Juspay
+    url: https://juspay.io/in
+servers:
+- url: https://api.juspay.in
+  description: Production
+- url: https://sandbox.juspay.in
+  description: Sandbox
+security:
+- basicAuth: []
+tags:
+- name: Refunds
+  description: Refund a charged order.
+paths:
+  /orders/{order_id}/refunds:
+    parameters:
+    - $ref: '#/components/parameters/OrderId'
+    post:
+      operationId: createRefund
+      tags:
+      - Refunds
+      summary: Refund an order
+      description: Creates a refund for a CHARGED order. `unique_request_id` must be unique per refund request and `amount` must not exceed the refundable balance.
+      parameters:
+      - $ref: '#/components/parameters/MerchantId'
+      - $ref: '#/components/parameters/RoutingId'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RefundInput'
+      responses:
+        '200':
+          description: The order with the refund appended.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Refund not eligible (e.g. INSTANT with no payment source).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        order_id:
+          type: string
+        status:
+          type: string
+          description: Order status; CHARGED indicates a successful payment.
+          enum:
+          - NEW
+          - PENDING_VBV
+          - AUTHORIZING
+          - CHARGED
+          - AUTHENTICATION_FAILED
+          - AUTHORIZATION_FAILED
+          - JUSPAY_DECLINED
+          - REFUNDED
+          - PARTIAL_REFUNDED
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        payment_links:
+          type: object
+          additionalProperties: true
+        refunds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Refund'
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        error_code:
+          type: string
+        error_message:
+          type: string
+    Refund:
+      type: object
+      properties:
+        unique_request_id:
+          type: string
+        amount:
+          type: number
+          format: double
+        status:
+          type: string
+        ref:
+          type: string
+    RefundInput:
+      type: object
+      required:
+      - unique_request_id
+      - amount
+      properties:
+        unique_request_id:
+          type: string
+          description: Uniquely identifies this refund request (max 255 chars).
+        amount:
+          type: number
+          format: double
+          description: Refund amount; must not exceed the refundable balance.
+        refundType:
+          type: string
+          enum:
+          - STANDARD
+          - INSTANT
+          - INSTANT_WITH_FALLBACK
+          default: STANDARD
+        metaData:
+          type: string
+          description: Optional context, including a description field for the reason.
+  parameters:
+    RoutingId:
+      name: x-routing-id
+      in: header
+      required: false
+      description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
+      schema:
+        type: string
+    MerchantId:
+      name: x-merchantid
+      in: header
+      required: true
+      description: Merchant ID issued by Juspay.
+      schema:
+        type: string
+    OrderId:
+      name: order_id
+      in: path
+      required: true
+      description: Unique alphanumeric order identifier (up to 21 characters).
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: 'HTTP Basic authentication. The API key is the username and the password is an empty string; the pair is Base64-encoded into `Authorization: Basic <credentials>`. An `x-merchantid` header is also required on requests.'
