@@ -9,7 +9,20 @@ description: Juspay is an Indian payments orchestration and checkout platform th
   refunds, and manage customers, and pair with the HyperSDK / Hyper Checkout drop-in
   checkout. APIs authenticate with an API key over HTTP Basic plus a merchant ID
   header, against a sandbox and a production host.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/juspay.png
 tags:
 - Payments
 - Payment Orchestration
@@ -25,97 +38,126 @@ created: '2026-07-12'
 modified: '2026-07-12'
 specificationVersion: '0.19'
 apis:
-- aid: juspay:juspay-orders-api
-  name: Juspay Orders API
-  tags:
-  - Orders
-  - Payments
-  - Order Status
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
-  baseURL: https://api.juspay.in
-  properties:
-  - url: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
-    type: Documentation
-  - url: https://juspay.io/in/docs/api-reference/docs/express-checkout/order-status-api
-    type: APIReference
-  - url: openapi/juspay-openapi.yml
-    type: OpenAPI
-  description: Create an order (POST /orders), retrieve its current status by order
-    id (GET /orders/{order_id}), and read the encrypted status variant
-    (POST /v4/order-status). The order is the unit a payment is attached to; a
-    transaction is successful only when the order status reads CHARGED.
-- aid: juspay:juspay-transactions-api
-  name: Juspay Transactions API
-  tags:
-  - Transactions
-  - Payments
-  - Server to Server
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction
-  baseURL: https://api.juspay.in
-  properties:
-  - url: https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction
-    type: Documentation
-  - url: openapi/juspay-openapi.yml
-    type: OpenAPI
-  description: Server-to-server transaction endpoint (POST /txns) that processes a
-    payment against an existing order with a chosen payment method - cards, UPI,
-    netbanking, or wallets. Documented as exempt from the standard order
-    authentication flow in the Express Checkout reference.
-- aid: juspay:juspay-session-api
-  name: Juspay Session API
-  tags:
-  - Session
-  - Checkout
-  - HyperSDK
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://juspay.io/in/docs/hyper-checkout/web/base-sdk-integration/session
-  baseURL: https://api.juspay.in
-  properties:
-  - url: https://juspay.io/in/docs/hyper-checkout/web/base-sdk-integration/session
-    type: Documentation
-  - url: openapi/juspay-openapi.yml
-    type: OpenAPI
-  description: Create a payment session (POST /session) that accepts order
-    parameters and returns an SDK payload and payment links to initialize a Hyper
-    Checkout / HyperSDK drop-in payment experience on web or mobile.
-- aid: juspay:juspay-refunds-api
-  name: Juspay Refunds API
-  tags:
-  - Refunds
-  - Payments
-  - Reconciliation
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://juspay.io/in/docs/api-reference/docs/express-checkout/refund-order-api
-  baseURL: https://api.juspay.in
-  properties:
-  - url: https://juspay.io/in/docs/api-reference/docs/express-checkout/refund-order-api
-    type: Documentation
-  - url: openapi/juspay-openapi.yml
-    type: OpenAPI
-  description: Create a refund for a CHARGED order (POST /orders/{order_id}/refunds)
-    with a unique request id and amount. Supports STANDARD, INSTANT, and
-    INSTANT_WITH_FALLBACK refund types depending on payment-source availability.
 - aid: juspay:juspay-customers-api
   name: Juspay Customers API
+  description: Create and retrieve customers.
+  humanURL: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
+  baseURL: https://api.juspay.in
   tags:
   - Customers
-  - Tokenization
-  - Client Auth Token
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://juspay.io/in/docs/api-reference/docs/express-checkout/createcustomer
-  baseURL: https://api.juspay.in
   properties:
-  - url: https://juspay.io/in/docs/api-reference/docs/express-checkout/createcustomer
-    type: Documentation
-  - url: https://juspay.io/in/docs/api-reference/docs/express-checkout/getcustomer
-    type: APIReference
-  - url: openapi/juspay-openapi.yml
-    type: OpenAPI
-  description: Create a customer (POST /customers) and retrieve one by id
-    (GET /customers/{customer_id}). Get/create customer can also mint a
-    15-minute client auth token used for client-side SDK authentication.
+  - type: OpenAPI
+    url: openapi/juspay-customers-api-openapi.yml
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
+  - type: APIReference
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/order-status-api
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction
+  - type: Documentation
+    url: https://juspay.io/in/docs/hyper-checkout/web/base-sdk-integration/session
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/refund-order-api
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/createcustomer
+  - type: APIReference
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/getcustomer
+- aid: juspay:juspay-orders-api
+  name: Juspay Orders API
+  description: Create orders and read order status.
+  humanURL: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
+  baseURL: https://api.juspay.in
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/juspay-orders-api-openapi.yml
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
+  - type: APIReference
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/order-status-api
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction
+  - type: Documentation
+    url: https://juspay.io/in/docs/hyper-checkout/web/base-sdk-integration/session
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/refund-order-api
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/createcustomer
+  - type: APIReference
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/getcustomer
+- aid: juspay:juspay-refunds-api
+  name: Juspay Refunds API
+  description: Refund a charged order.
+  humanURL: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
+  baseURL: https://api.juspay.in
+  tags:
+  - Refunds
+  properties:
+  - type: OpenAPI
+    url: openapi/juspay-refunds-api-openapi.yml
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
+  - type: APIReference
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/order-status-api
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction
+  - type: Documentation
+    url: https://juspay.io/in/docs/hyper-checkout/web/base-sdk-integration/session
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/refund-order-api
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/createcustomer
+  - type: APIReference
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/getcustomer
+- aid: juspay:juspay-session-api
+  name: Juspay Session API
+  description: Create a payment session for the Hyper Checkout / HyperSDK.
+  humanURL: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
+  baseURL: https://api.juspay.in
+  tags:
+  - Session
+  properties:
+  - type: OpenAPI
+    url: openapi/juspay-session-api-openapi.yml
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
+  - type: APIReference
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/order-status-api
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction
+  - type: Documentation
+    url: https://juspay.io/in/docs/hyper-checkout/web/base-sdk-integration/session
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/refund-order-api
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/createcustomer
+  - type: APIReference
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/getcustomer
+- aid: juspay:juspay-transactions-api
+  name: Juspay Transactions API
+  description: Server-to-server transaction processing against an order.
+  humanURL: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
+  baseURL: https://api.juspay.in
+  tags:
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/juspay-transactions-api-openapi.yml
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
+  - type: APIReference
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/order-status-api
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction
+  - type: Documentation
+    url: https://juspay.io/in/docs/hyper-checkout/web/base-sdk-integration/session
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/refund-order-api
+  - type: Documentation
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/createcustomer
+  - type: APIReference
+    url: https://juspay.io/in/docs/api-reference/docs/express-checkout/getcustomer
 common:
 - type: AgenticAccess
   url: agentic-access/juspay-agentic-access.yml
