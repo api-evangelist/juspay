@@ -1,0 +1,22 @@
+{
+  "provider": "juspay",
+  "sources": [
+    "juspay-customers-api-openapi.yml",
+    "juspay-orders-api-openapi.yml",
+    "juspay-refunds-api-openapi.yml",
+    "juspay-session-api-openapi.yml",
+    "juspay-transactions-api-openapi.yml"
+  ],
+  "outputs": [
+    "juspay-customers-api-openapi.yml",
+    "juspay-orders-api-openapi.yml",
+    "juspay-refunds-api-openapi.yml",
+    "juspay-session-api-openapi.yml",
+    "juspay-transactions-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
