@@ -1,0 +1,100 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Juspay Express Checkout Customers Orders API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create an order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.juspay.in/orders",
+            "headers": [
+              {
+                "name": "x-merchantid",
+                "value": ""
+              },
+              {
+                "name": "x-routing-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Creates an order, the unit a payment is attached to. Returns an order reference (and, when requested via options.get_client_auth_token, a client auth token for SDK use)."
+        },
+        {
+          "info": {
+            "name": "Get order status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.juspay.in/orders/:order_id",
+            "headers": [
+              {
+                "name": "x-merchantid",
+                "value": ""
+              },
+              {
+                "name": "x-routing-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "order_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique alphanumeric order identifier (up to 21 characters)."
+              }
+            ]
+          },
+          "docs": "Retrieves the status and details of an order by its id. A transaction is successful only when `status` is CHARGED."
+        },
+        {
+          "info": {
+            "name": "Get order status (encrypted V4)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.juspay.in/v4/order-status",
+            "headers": [
+              {
+                "name": "x-merchantid",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Encrypted (JWE/JWT) variant of order status. Accepts an encrypted payload as a request body (POST) or query parameter (GET) and returns the order status. Modeled from documentation; encrypted payload schema not expanded here."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

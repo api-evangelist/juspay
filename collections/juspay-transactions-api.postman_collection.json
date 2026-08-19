@@ -1,0 +1,321 @@
+{
+  "item": [
+    {
+      "id": "11df4798-3ffe-40d0-b45a-95f76b34c287",
+      "name": "Transactions",
+      "description": {
+        "content": "Server-to-server transaction processing against an order.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "af3d1a86-7422-43e1-83ef-773b432b2df5",
+          "name": "Create a transaction",
+          "request": {
+            "name": "Create a transaction",
+            "description": {
+              "content": "Server-to-server transaction endpoint that processes a payment against an existing order with a chosen payment method (card, UPI, netbanking, wallet). Documented as exempt from the standard order authentication flow. Body fields below are modeled from the documented flow and are not exhaustive.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "txns"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Merchant ID issued by Juspay.",
+                "key": "x-merchantid",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.",
+                "key": "x-routing-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "order_id",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "payment_method_type",
+                  "value": "<string>",
+                  "description": "(Required) e.g. CARD, UPI, NB (netbanking), WALLET."
+                },
+                {
+                  "disabled": false,
+                  "key": "payment_method",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "redirect_after_payment",
+                  "value": "<boolean>"
+                },
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "<string>",
+                  "description": "Response format, e.g. json."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3dffea75-fe01-4cb4-bf2e-548072c0252c",
+              "name": "Transaction result / next action.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "txns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant ID issued by Juspay.",
+                    "key": "x-merchantid",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.",
+                    "key": "x-routing-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) e.g. CARD, UPI, NB (netbanking), WALLET.",
+                        "type": "text/plain"
+                      },
+                      "key": "payment_method_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "payment_method",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "redirect_after_payment",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Response format, e.g. json.",
+                        "type": "text/plain"
+                      },
+                      "key": "format",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": true,\n  \"key_1\": 856.6037387881876\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4796a74a-1bee-4d8d-8c7f-ea9d4215ced2",
+              "name": "Missing or invalid credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "txns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant ID issued by Juspay.",
+                    "key": "x-merchantid",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.",
+                    "key": "x-routing-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) e.g. CARD, UPI, NB (netbanking), WALLET.",
+                        "type": "text/plain"
+                      },
+                      "key": "payment_method_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "payment_method",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "redirect_after_payment",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Response format, e.g. json.",
+                        "type": "text/plain"
+                      },
+                      "key": "format",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"string\",\n  \"error_code\": \"string\",\n  \"error_message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.juspay.in",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "87257270-a249-4b26-ab7d-39d848716416",
+    "name": "Juspay Express Checkout Customers Transactions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Server-to-server REST API for the Juspay payments orchestration and checkout platform. Merchants create and track orders, process transactions across payment methods (cards, UPI, netbanking, wallets), issue refunds, manage customers, and initialize the Hyper Checkout / HyperSDK drop-in checkout via a payment session. Requests authenticate with an API key over HTTP Basic (API key as the username, empty password) plus an `x-merchantid` header; Juspay recommends passing an `x-routing-id` (typically the customer id) to pin the payment session lifecycle. Most write endpoints accept `application/x-www-form-urlencoded` bodies.\nEndpoint paths and methods below are grounded in Juspay's public Express Checkout / Hyper Checkout documentation as of 2026-07-12. Request and response schemas are modeled from the documented parameters and are marked where fields are illustrative rather than exhaustive; verify against the live reference before production use.\n\nContact Support:\n Name: Juspay",
+      "type": "text/plain"
+    }
+  }
+}

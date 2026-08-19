@@ -1,0 +1,437 @@
+{
+  "item": [
+    {
+      "id": "d17ce8b1-82be-49b1-83b6-8c2e954f997e",
+      "name": "Refunds",
+      "description": {
+        "content": "Refund a charged order.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ba39b591-0b09-4999-a226-cf72eeeade4a",
+          "name": "Refund an order",
+          "request": {
+            "name": "Refund an order",
+            "description": {
+              "content": "Creates a refund for a CHARGED order. `unique_request_id` must be unique per refund request and `amount` must not exceed the refundable balance.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
+                ":order_id",
+                "refunds"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "order_id",
+                  "description": "(Required) Unique alphanumeric order identifier (up to 21 characters)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Merchant ID issued by Juspay.",
+                "key": "x-merchantid",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.",
+                "key": "x-routing-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "unique_request_id",
+                  "value": "<string>",
+                  "description": "(Required) Uniquely identifies this refund request (max 255 chars)."
+                },
+                {
+                  "disabled": false,
+                  "key": "amount",
+                  "value": "<double>",
+                  "description": "(Required) Refund amount; must not exceed the refundable balance."
+                },
+                {
+                  "disabled": false,
+                  "key": "refundType",
+                  "value": "STANDARD"
+                },
+                {
+                  "disabled": false,
+                  "key": "metaData",
+                  "value": "<string>",
+                  "description": "Optional context, including a description field for the reason."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ba7a01ba-d17c-4d0e-bc4c-2fe577cbd426",
+              "name": "The order with the refund appended.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    ":order_id",
+                    "refunds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "order_id",
+                      "description": "(Required) Unique alphanumeric order identifier (up to 21 characters)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant ID issued by Juspay.",
+                    "key": "x-merchantid",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.",
+                    "key": "x-routing-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Uniquely identifies this refund request (max 255 chars).",
+                        "type": "text/plain"
+                      },
+                      "key": "unique_request_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Refund amount; must not exceed the refundable balance.",
+                        "type": "text/plain"
+                      },
+                      "key": "amount",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "refundType",
+                      "value": "STANDARD"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Optional context, including a description field for the reason.",
+                        "type": "text/plain"
+                      },
+                      "key": "metaData",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"order_id\": \"string\",\n  \"status\": \"PENDING_VBV\",\n  \"amount\": 950.6146086766076,\n  \"currency\": \"string\",\n  \"payment_links\": {\n    \"key_0\": 5561,\n    \"key_1\": 7860.174734230188,\n    \"key_2\": 5098.903363996125\n  },\n  \"refunds\": [\n    {\n      \"unique_request_id\": \"string\",\n      \"amount\": 7307.608348954793,\n      \"status\": \"string\",\n      \"ref\": \"string\"\n    },\n    {\n      \"unique_request_id\": \"string\",\n      \"amount\": 3598.1327225480586,\n      \"status\": \"string\",\n      \"ref\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7475b6f2-0405-4caa-9275-e0141d08d44d",
+              "name": "Refund not eligible (e.g. INSTANT with no payment source).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    ":order_id",
+                    "refunds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "order_id",
+                      "description": "(Required) Unique alphanumeric order identifier (up to 21 characters)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant ID issued by Juspay.",
+                    "key": "x-merchantid",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.",
+                    "key": "x-routing-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Uniquely identifies this refund request (max 255 chars).",
+                        "type": "text/plain"
+                      },
+                      "key": "unique_request_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Refund amount; must not exceed the refundable balance.",
+                        "type": "text/plain"
+                      },
+                      "key": "amount",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "refundType",
+                      "value": "STANDARD"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Optional context, including a description field for the reason.",
+                        "type": "text/plain"
+                      },
+                      "key": "metaData",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"string\",\n  \"error_code\": \"string\",\n  \"error_message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "28b8d395-1119-4325-9d6f-40c9438bcbee",
+              "name": "Missing or invalid credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    ":order_id",
+                    "refunds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "order_id",
+                      "description": "(Required) Unique alphanumeric order identifier (up to 21 characters)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant ID issued by Juspay.",
+                    "key": "x-merchantid",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.",
+                    "key": "x-routing-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Uniquely identifies this refund request (max 255 chars).",
+                        "type": "text/plain"
+                      },
+                      "key": "unique_request_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Refund amount; must not exceed the refundable balance.",
+                        "type": "text/plain"
+                      },
+                      "key": "amount",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "refundType",
+                      "value": "STANDARD"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Optional context, including a description field for the reason.",
+                        "type": "text/plain"
+                      },
+                      "key": "metaData",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"string\",\n  \"error_code\": \"string\",\n  \"error_message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.juspay.in",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3894f7bd-5a31-47aa-b4e0-1908e09aee1d",
+    "name": "Juspay Express Checkout Customers Refunds API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Server-to-server REST API for the Juspay payments orchestration and checkout platform. Merchants create and track orders, process transactions across payment methods (cards, UPI, netbanking, wallets), issue refunds, manage customers, and initialize the Hyper Checkout / HyperSDK drop-in checkout via a payment session. Requests authenticate with an API key over HTTP Basic (API key as the username, empty password) plus an `x-merchantid` header; Juspay recommends passing an `x-routing-id` (typically the customer id) to pin the payment session lifecycle. Most write endpoints accept `application/x-www-form-urlencoded` bodies.\nEndpoint paths and methods below are grounded in Juspay's public Express Checkout / Hyper Checkout documentation as of 2026-07-12. Request and response schemas are modeled from the documented parameters and are marked where fields are illustrative rather than exhaustive; verify against the live reference before production use.\n\nContact Support:\n Name: Juspay",
+      "type": "text/plain"
+    }
+  }
+}

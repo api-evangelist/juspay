@@ -1,0 +1,71 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Juspay Express Checkout Customers API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Customers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.juspay.in/customers",
+            "headers": [
+              {
+                "name": "x-merchantid",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Creates a customer. `customer_id` should be at least 8 characters and unique (typically an email, mobile number, or internal id). Can return a 15-minute client auth token for client-side SDK authentication."
+        },
+        {
+          "info": {
+            "name": "Get a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.juspay.in/customers/:customer_id",
+            "headers": [
+              {
+                "name": "x-merchantid",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customer_id",
+                "value": "",
+                "type": "path",
+                "description": "The merchant's unique customer identifier."
+              }
+            ]
+          },
+          "docs": "Retrieves a customer by id. Can also return a client auth token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

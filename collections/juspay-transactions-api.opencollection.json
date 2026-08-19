@@ -1,0 +1,50 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Juspay Express Checkout Customers Transactions API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transactions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.juspay.in/txns",
+            "headers": [
+              {
+                "name": "x-merchantid",
+                "value": ""
+              },
+              {
+                "name": "x-routing-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Server-to-server transaction endpoint that processes a payment against an existing order with a chosen payment method (card, UPI, netbanking, wallet). Documented as exempt from the standard order authentication flow. Body fields below are modeled from the documented flow and are not exhaustive."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,58 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Juspay Express Checkout Customers Refunds API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Refunds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Refund an order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.juspay.in/orders/:order_id/refunds",
+            "headers": [
+              {
+                "name": "x-merchantid",
+                "value": ""
+              },
+              {
+                "name": "x-routing-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "order_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique alphanumeric order identifier (up to 21 characters)."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Creates a refund for a CHARGED order. `unique_request_id` must be unique per refund request and `amount` must not exceed the refundable balance."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

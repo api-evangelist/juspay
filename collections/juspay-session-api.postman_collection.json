@@ -1,0 +1,231 @@
+{
+  "item": [
+    {
+      "id": "fbafe9c2-50e8-495a-88e1-291c35ad9412",
+      "name": "Session",
+      "description": {
+        "content": "Create a payment session for the Hyper Checkout / HyperSDK.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e15a3564-9e8b-46ea-89fe-af3098e4168a",
+          "name": "Create a payment session",
+          "request": {
+            "name": "Create a payment session",
+            "description": {
+              "content": "Creates a payment session for the Hyper Checkout / HyperSDK. Accepts order parameters and returns an SDK payload and payment links used to initialize the drop-in checkout on web or mobile.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "session"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Merchant ID issued by Juspay.",
+                "key": "x-merchantid",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.",
+                "key": "x-routing-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order_id\": \"<string>\",\n  \"amount\": \"<double>\",\n  \"customer_id\": \"<string>\",\n  \"currency\": \"INR\",\n  \"return_url\": \"<uri>\",\n  \"payment_page_client_id\": \"<string>\",\n  \"action\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d80633f0-6e0e-47be-90dd-effde94f65ee",
+              "name": "SDK payload and payment links for the session.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "session"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant ID issued by Juspay.",
+                    "key": "x-merchantid",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.",
+                    "key": "x-routing-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\",\n  \"amount\": \"<double>\",\n  \"customer_id\": \"<string>\",\n  \"currency\": \"INR\",\n  \"return_url\": \"<uri>\",\n  \"payment_page_client_id\": \"<string>\",\n  \"action\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": \"string\",\n  \"key_1\": false,\n  \"key_2\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "439dfe95-0911-43a0-a83c-59a288a84475",
+              "name": "Missing or invalid credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "session"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Merchant ID issued by Juspay.",
+                    "key": "x-merchantid",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.",
+                    "key": "x-routing-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order_id\": \"<string>\",\n  \"amount\": \"<double>\",\n  \"customer_id\": \"<string>\",\n  \"currency\": \"INR\",\n  \"return_url\": \"<uri>\",\n  \"payment_page_client_id\": \"<string>\",\n  \"action\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"string\",\n  \"error_code\": \"string\",\n  \"error_message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.juspay.in",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1926f0e6-d826-450e-b933-34cad5e1e32a",
+    "name": "Juspay Express Checkout Customers Session API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Server-to-server REST API for the Juspay payments orchestration and checkout platform. Merchants create and track orders, process transactions across payment methods (cards, UPI, netbanking, wallets), issue refunds, manage customers, and initialize the Hyper Checkout / HyperSDK drop-in checkout via a payment session. Requests authenticate with an API key over HTTP Basic (API key as the username, empty password) plus an `x-merchantid` header; Juspay recommends passing an `x-routing-id` (typically the customer id) to pin the payment session lifecycle. Most write endpoints accept `application/x-www-form-urlencoded` bodies.\nEndpoint paths and methods below are grounded in Juspay's public Express Checkout / Hyper Checkout documentation as of 2026-07-12. Request and response schemas are modeled from the documented parameters and are marked where fields are illustrative rather than exhaustive; verify against the live reference before production use.\n\nContact Support:\n Name: Juspay",
+      "type": "text/plain"
+    }
+  }
+}

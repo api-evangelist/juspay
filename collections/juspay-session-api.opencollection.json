@@ -1,0 +1,50 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Juspay Express Checkout Customers Session API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Session",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a payment session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.juspay.in/session",
+            "headers": [
+              {
+                "name": "x-merchantid",
+                "value": ""
+              },
+              {
+                "name": "x-routing-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a payment session for the Hyper Checkout / HyperSDK. Accepts order parameters and returns an SDK payload and payment links used to initialize the drop-in checkout on web or mobile."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
