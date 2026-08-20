@@ -68,6 +68,8 @@ apis:
   humanURL: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
   baseURL: https://api.juspay.in
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
@@ -140,6 +142,8 @@ apis:
   humanURL: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
   baseURL: https://api.juspay.in
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
