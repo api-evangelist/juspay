@@ -9,6 +9,18 @@ description: Juspay is an Indian payments orchestration and checkout platform th
   refunds, and manage customers, and pair with the HyperSDK / Hyper Checkout drop-in
   checkout. APIs authenticate with an API key over HTTP Basic plus a merchant ID
   header, against a sandbox and a production host.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
