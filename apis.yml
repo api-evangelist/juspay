@@ -131,6 +131,8 @@ apis:
   humanURL: https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api
   baseURL: https://api.juspay.in
   tags:
+  - Sessions
+  tags_raw:
   - Session
   properties:
   - type: OpenAPI
