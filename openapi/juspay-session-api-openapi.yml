@@ -1,9 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Juspay Express Checkout Customers Session API
-  description: 'Server-to-server REST API for the Juspay payments orchestration and checkout platform. Merchants create and track orders, process transactions across payment methods (cards, UPI, netbanking, wallets), issue refunds, manage customers, and initialize the Hyper Checkout / HyperSDK drop-in checkout via a payment session. Requests authenticate with an API key over HTTP Basic (API key as the username, empty password) plus an `x-merchantid` header; Juspay recommends passing an `x-routing-id` (typically the customer id) to pin the payment session lifecycle. Most write endpoints accept `application/x-www-form-urlencoded` bodies.
-
-    Endpoint paths and methods below are grounded in Juspay''s public Express Checkout / Hyper Checkout documentation as of 2026-07-12. Request and response schemas are modeled from the documented parameters and are marked where fields are illustrative rather than exhaustive; verify against the live reference before production use.'
+  title: Juspay Express Checkout Session API
+  description: Server-to-server REST API for the Juspay payments orchestration and checkout platform.
   version: '1.0'
   contact:
     name: Juspay
@@ -47,13 +45,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   parameters:
-    RoutingId:
-      name: x-routing-id
-      in: header
-      required: false
-      description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
-      schema:
-        type: string
     MerchantId:
       name: x-merchantid
       in: header
@@ -61,6 +52,20 @@ components:
       description: Merchant ID issued by Juspay.
       schema:
         type: string
+    RoutingId:
+      name: x-routing-id
+      in: header
+      required: false
+      description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     SessionInput:
       type: object
@@ -96,13 +101,6 @@ components:
           type: string
         error_message:
           type: string
-  responses:
-    Unauthorized:
-      description: Missing or invalid credentials.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     basicAuth:
       type: http

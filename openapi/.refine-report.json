@@ -1,11 +1,7 @@
 {
   "provider": "juspay",
   "sources": [
-    "juspay-customers-api-openapi.yml",
-    "juspay-orders-api-openapi.yml",
-    "juspay-refunds-api-openapi.yml",
-    "juspay-session-api-openapi.yml",
-    "juspay-transactions-api-openapi.yml"
+    "_original/juspay-openapi.yml"
   ],
   "outputs": [
     "juspay-customers-api-openapi.yml",
@@ -17,6 +13,16 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "juspay-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "juspay-customers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "juspay-orders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "juspay-refunds-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "juspay-session-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "juspay-transactions-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
