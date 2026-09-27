@@ -59,14 +59,16 @@ components:
       description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
       schema:
         type: string
-  responses:
-    Unauthorized:
-      description: Missing or invalid credentials.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        error_code:
+          type: string
+        error_message:
+          type: string
     SessionInput:
       type: object
       required:
@@ -92,15 +94,13 @@ components:
         action:
           type: string
           description: e.g. paymentPage.
-    Error:
-      type: object
-      properties:
-        status:
-          type: string
-        error_code:
-          type: string
-        error_message:
-          type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     basicAuth:
       type: http

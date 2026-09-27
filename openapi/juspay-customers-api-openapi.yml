@@ -78,18 +78,15 @@ components:
       schema:
         type: string
   schemas:
-    Customer:
-      allOf:
-      - $ref: '#/components/schemas/CustomerInput'
-      - type: object
-        properties:
-          id:
-            type: string
-            description: Juspay-assigned customer object id.
-          juspay:
-            type: object
-            additionalProperties: true
-            description: Container for a returned client_auth_token, when requested.
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        error_code:
+          type: string
+        error_message:
+          type: string
     CustomerInput:
       type: object
       required:
@@ -110,15 +107,18 @@ components:
           type: string
         options.get_client_auth_token:
           type: boolean
-    Error:
-      type: object
-      properties:
-        status:
-          type: string
-        error_code:
-          type: string
-        error_message:
-          type: string
+    Customer:
+      allOf:
+      - $ref: '#/components/schemas/CustomerInput'
+      - type: object
+        properties:
+          id:
+            type: string
+            description: Juspay-assigned customer object id.
+          juspay:
+            type: object
+            additionalProperties: true
+            description: Container for a returned client_auth_token, when requested.
   responses:
     NotFound:
       description: The requested resource was not found.

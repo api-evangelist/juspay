@@ -51,52 +51,28 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  parameters:
-    OrderId:
-      name: order_id
-      in: path
-      required: true
-      description: Unique alphanumeric order identifier (up to 21 characters).
-      schema:
-        type: string
-    MerchantId:
-      name: x-merchantid
-      in: header
-      required: true
-      description: Merchant ID issued by Juspay.
-      schema:
-        type: string
-    RoutingId:
-      name: x-routing-id
-      in: header
-      required: false
-      description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
-      schema:
-        type: string
   schemas:
-    RefundInput:
+    Refund:
       type: object
-      required:
-      - unique_request_id
-      - amount
       properties:
         unique_request_id:
           type: string
-          description: Uniquely identifies this refund request (max 255 chars).
         amount:
           type: number
           format: double
-          description: Refund amount; must not exceed the refundable balance.
-        refundType:
+        status:
           type: string
-          enum:
-          - STANDARD
-          - INSTANT
-          - INSTANT_WITH_FALLBACK
-          default: STANDARD
-        metaData:
+        ref:
           type: string
-          description: Optional context, including a description field for the reason.
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        error_code:
+          type: string
+        error_message:
+          type: string
     Order:
       type: object
       properties:
@@ -127,27 +103,51 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Refund'
-    Refund:
+    RefundInput:
       type: object
+      required:
+      - unique_request_id
+      - amount
       properties:
         unique_request_id:
           type: string
+          description: Uniquely identifies this refund request (max 255 chars).
         amount:
           type: number
           format: double
-        status:
+          description: Refund amount; must not exceed the refundable balance.
+        refundType:
           type: string
-        ref:
+          enum:
+          - STANDARD
+          - INSTANT
+          - INSTANT_WITH_FALLBACK
+          default: STANDARD
+        metaData:
           type: string
-    Error:
-      type: object
-      properties:
-        status:
-          type: string
-        error_code:
-          type: string
-        error_message:
-          type: string
+          description: Optional context, including a description field for the reason.
+  parameters:
+    MerchantId:
+      name: x-merchantid
+      in: header
+      required: true
+      description: Merchant ID issued by Juspay.
+      schema:
+        type: string
+    OrderId:
+      name: order_id
+      in: path
+      required: true
+      description: Unique alphanumeric order identifier (up to 21 characters).
+      schema:
+        type: string
+    RoutingId:
+      name: x-routing-id
+      in: header
+      required: false
+      description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
+      schema:
+        type: string
   responses:
     Unauthorized:
       description: Missing or invalid credentials.

@@ -92,72 +92,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  parameters:
-    OrderId:
-      name: order_id
-      in: path
-      required: true
-      description: Unique alphanumeric order identifier (up to 21 characters).
-      schema:
-        type: string
-    MerchantId:
-      name: x-merchantid
-      in: header
-      required: true
-      description: Merchant ID issued by Juspay.
-      schema:
-        type: string
-    RoutingId:
-      name: x-routing-id
-      in: header
-      required: false
-      description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
-      schema:
-        type: string
-  responses:
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid credentials.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Order:
-      type: object
-      properties:
-        order_id:
-          type: string
-        status:
-          type: string
-          description: Order status; CHARGED indicates a successful payment.
-          enum:
-          - NEW
-          - PENDING_VBV
-          - AUTHORIZING
-          - CHARGED
-          - AUTHENTICATION_FAILED
-          - AUTHORIZATION_FAILED
-          - JUSPAY_DECLINED
-          - REFUNDED
-          - PARTIAL_REFUNDED
-        amount:
-          type: number
-          format: double
-        currency:
-          type: string
-        payment_links:
-          type: object
-          additionalProperties: true
-        refunds:
-          type: array
-          items:
-            $ref: '#/components/schemas/Refund'
     Refund:
       type: object
       properties:
@@ -218,6 +153,71 @@ components:
           type: string
         error_message:
           type: string
+    Order:
+      type: object
+      properties:
+        order_id:
+          type: string
+        status:
+          type: string
+          description: Order status; CHARGED indicates a successful payment.
+          enum:
+          - NEW
+          - PENDING_VBV
+          - AUTHORIZING
+          - CHARGED
+          - AUTHENTICATION_FAILED
+          - AUTHORIZATION_FAILED
+          - JUSPAY_DECLINED
+          - REFUNDED
+          - PARTIAL_REFUNDED
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        payment_links:
+          type: object
+          additionalProperties: true
+        refunds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Refund'
+  parameters:
+    MerchantId:
+      name: x-merchantid
+      in: header
+      required: true
+      description: Merchant ID issued by Juspay.
+      schema:
+        type: string
+    OrderId:
+      name: order_id
+      in: path
+      required: true
+      description: Unique alphanumeric order identifier (up to 21 characters).
+      schema:
+        type: string
+    RoutingId:
+      name: x-routing-id
+      in: header
+      required: false
+      description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
+      schema:
+        type: string
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     basicAuth:
       type: http
