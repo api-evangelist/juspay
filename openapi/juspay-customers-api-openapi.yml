@@ -69,24 +69,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    MerchantId:
-      name: x-merchantid
-      in: header
-      required: true
-      description: Merchant ID issued by Juspay.
-      schema:
-        type: string
   schemas:
-    Error:
-      type: object
-      properties:
-        status:
-          type: string
-        error_code:
-          type: string
-        error_message:
-          type: string
     CustomerInput:
       type: object
       required:
@@ -107,6 +90,15 @@ components:
           type: string
         options.get_client_auth_token:
           type: boolean
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        error_code:
+          type: string
+        error_message:
+          type: string
     Customer:
       allOf:
       - $ref: '#/components/schemas/CustomerInput'
@@ -132,6 +124,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    MerchantId:
+      name: x-merchantid
+      in: header
+      required: true
+      description: Merchant ID issued by Juspay.
+      schema:
+        type: string
   securitySchemes:
     basicAuth:
       type: http

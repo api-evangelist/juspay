@@ -60,15 +60,6 @@ components:
       schema:
         type: string
   schemas:
-    Error:
-      type: object
-      properties:
-        status:
-          type: string
-        error_code:
-          type: string
-        error_message:
-          type: string
     TransactionInput:
       type: object
       required:
@@ -87,6 +78,15 @@ components:
         format:
           type: string
           description: Response format, e.g. json.
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        error_code:
+          type: string
+        error_message:
+          type: string
   responses:
     Unauthorized:
       description: Missing or invalid credentials.
