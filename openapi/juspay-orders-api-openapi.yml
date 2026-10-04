@@ -93,19 +93,26 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   responses:
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Missing or invalid credentials.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
+    RoutingId:
+      name: x-routing-id
+      in: header
+      required: false
+      description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
+      schema:
+        type: string
     MerchantId:
       name: x-merchantid
       in: header
@@ -120,13 +127,6 @@ components:
       description: Unique alphanumeric order identifier (up to 21 characters).
       schema:
         type: string
-    RoutingId:
-      name: x-routing-id
-      in: header
-      required: false
-      description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
-      schema:
-        type: string
   schemas:
     Refund:
       type: object
@@ -139,6 +139,15 @@ components:
         status:
           type: string
         ref:
+          type: string
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        error_code:
+          type: string
+        error_message:
           type: string
     CreateOrderInput:
       type: object
@@ -179,15 +188,6 @@ components:
         options.get_client_auth_token:
           type: boolean
           description: Request a client auth token for SDK use.
-    Error:
-      type: object
-      properties:
-        status:
-          type: string
-        error_code:
-          type: string
-        error_message:
-          type: string
     Order:
       type: object
       properties:

@@ -44,21 +44,13 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  parameters:
-    MerchantId:
-      name: x-merchantid
-      in: header
-      required: true
-      description: Merchant ID issued by Juspay.
-      schema:
-        type: string
-    RoutingId:
-      name: x-routing-id
-      in: header
-      required: false
-      description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
-      schema:
-        type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     TransactionInput:
       type: object
@@ -87,13 +79,21 @@ components:
           type: string
         error_message:
           type: string
-  responses:
-    Unauthorized:
-      description: Missing or invalid credentials.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+  parameters:
+    RoutingId:
+      name: x-routing-id
+      in: header
+      required: false
+      description: Routing key that pins the payment session lifecycle - typically the customer_id, or an order/cart id for guest checkout.
+      schema:
+        type: string
+    MerchantId:
+      name: x-merchantid
+      in: header
+      required: true
+      description: Merchant ID issued by Juspay.
+      schema:
+        type: string
   securitySchemes:
     basicAuth:
       type: http
