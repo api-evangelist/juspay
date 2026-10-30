@@ -1,4 +1,4 @@
-# Juspay (juspay)
+# Juspay
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,149 +64,126 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Juspay is an Indian payments orchestration and checkout platform that routes transactions across payment gateways, aggregators, UPI, cards, wallets, and netbanking for merchants, banks, and card networks. Its server-to-server Express Checkout / PG REST APIs create and track orders, process transactions, issue refunds, and manage customers, and pair with the HyperSDK / Hyper Checkout drop-in checkout.
+Juspay is an Indian payments orchestration and checkout platform that routes transactions across payment gateways, aggregators, UPI, cards, wallets, and netbanking for merchants, banks, and card networks. Its server-to-server Express Checkout / PG REST APIs create and track orders, process transactions, issue refunds, and manage customers, and pair with the HyperSDK / Hyper Checkout drop-in checkout. APIs authenticate with an API key over HTTP Basic plus a merchant ID header, against a sandbox and a production host.
 
-## Access Model (Read This First)
+**Areas:** Payments · Payment Orchestration · Checkout · India · UPI · Cards · Payment Gateway · Fintech · HyperSDK · Financial Infrastructure
 
-Juspay is **not** a public self-serve API. Access is **enterprise / merchant-onboarding based**:
+## Juspay on APIs.io
 
-- You onboard as a merchant and are provisioned with an **API key** and a **merchant ID**.
-- Authentication is **HTTP Basic** — the API key is the **username** and the **password is an empty string** — sent as `Authorization: Basic <base64(apiKey:)>`. Every request also carries an **`x-merchantid`** header, and Juspay recommends an **`x-routing-id`** header (typically the `customer_id`) to pin the payment session lifecycle.
-- There are two hosts: **Sandbox** `https://sandbox.juspay.in` (integrate/test) and **Production** `https://api.juspay.in` (live).
-- There is **no public pricing page** (`juspay.io/in/pricing` returns 404 as of this review); pricing is a negotiated per-transaction / orchestration commercial arrangement. In India, bank-to-bank UPI is zero-MDR by NPCI mandate.
-- Client-side SDK calls use a short-lived (15-minute) **client auth token** minted by the create-order or get/create-customer endpoints, rather than the raw API key.
+Everything profiled for Juspay is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/juspay/](https://apis.io/providers/juspay/)** — or go straight to one of the APIs or properties below.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/juspay/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/juspay/refs/heads/main/apis.yml)
+### APIs (5)
 
-## Tags
+- [Juspay Customers API](https://apis.io/apis/juspay/juspay-customers-api/) — Create and retrieve customers.
+- [Juspay Orders API](https://apis.io/apis/juspay/juspay-orders-api/) — Create orders and read order status.
+- [Juspay Refunds API](https://apis.io/apis/juspay/juspay-refunds-api/) — Refund a charged order.
+- [Juspay Session API](https://apis.io/apis/juspay/juspay-session-api/) — Create a payment session for the Hyper Checkout / HyperSDK.
+- [Juspay Transactions API](https://apis.io/apis/juspay/juspay-transactions-api/) — Server-to-server transaction processing against an order.
 
-- Payments
-- Payment Orchestration
-- Checkout
-- India
-- UPI
-- Cards
-- Payment Gateway
-- Fintech
-- HyperSDK
-- Financial Infrastructure
+### Published properties
 
-## Timestamps
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-- **Created:** 2026-07-12
-- **Modified:** 2026-07-12
+#### Agentic access (1)
 
-## APIs
+Which operations an agent can call, which act, and which need a human in the loop.
 
-### Juspay Orders API
+- [Juspay Agentic Access](https://apis.io/agentic-access/juspay/juspay-agentic-access/)
 
-Create an order (`POST /orders`), retrieve its current status by order id (`GET /orders/{order_id}`), and read the encrypted status variant (`POST /v4/order-status`). The order is the unit a payment is attached to; a transaction is successful only when the order status reads `CHARGED`.
+#### Collections (6)
 
-- **Human URL:** [https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api](https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api)
-- **Base URL:** `https://api.juspay.in`
+Postman and Open Collection request collections.
 
-#### Tags
+- [Juspay Express Checkout API](https://apis.io/collections/juspay/open-juspay/)
+- [Juspay Express Checkout Customers API](https://apis.io/collections/juspay/open-juspay-customers-api/)
+- [Juspay Express Checkout Customers Orders API](https://apis.io/collections/juspay/open-juspay-orders-api/)
+- [Juspay Express Checkout Customers Refunds API](https://apis.io/collections/juspay/open-juspay-refunds-api/)
+- [Juspay Express Checkout Customers Session API](https://apis.io/collections/juspay/open-juspay-session-api/)
+- [Juspay Express Checkout Customers Transactions API](https://apis.io/collections/juspay/open-juspay-transactions-api/)
 
-- Orders
-- Payments
-- Order Status
+#### Security (2)
 
-#### Properties
+Authentication, trust centre, and vulnerability disclosure.
 
-- [Documentation](https://juspay.io/in/docs/api-reference/docs/express-checkout/create-order-api)
-- [API Reference](https://juspay.io/in/docs/api-reference/docs/express-checkout/order-status-api)
-- [OpenAPI](openapi/juspay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
+- [Juspay Authentication](https://apis.io/security/juspay/juspay-authentication/)
+- [Juspay Domain Security](https://apis.io/security/juspay/juspay-domain-security/)
 
-### Juspay Transactions API
+#### Plans and pricing (1)
 
-Server-to-server transaction endpoint (`POST /txns`) that processes a payment against an existing order with a chosen payment method — cards, UPI, netbanking, or wallets. Documented as exempt from the standard order authentication flow in the Express Checkout reference.
+Published plans, tiers and prices.
 
-- **Human URL:** [https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction](https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction)
-- **Base URL:** `https://api.juspay.in`
+- [Juspay Plans Pricing](https://apis.io/plans/juspay/juspay-plans-pricing/)
 
-#### Tags
+#### Rate limits (1)
 
-- Transactions
-- Payments
-- Server to Server
+Published request limits.
 
-#### Properties
+- [Juspay Rate Limits](https://apis.io/rate-limits/juspay/juspay-rate-limits/)
 
-- [Documentation](https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction)
-- [OpenAPI](openapi/juspay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
+#### FinOps (1)
 
-### Juspay Session API
+What the API costs to run, by operation.
 
-Create a payment session (`POST /session`) that accepts order parameters and returns an SDK payload and payment links to initialize a Hyper Checkout / HyperSDK drop-in payment experience on web or mobile.
+- [Juspay Finops](https://apis.io/finops/juspay/juspay-finops/)
 
-- **Human URL:** [https://juspay.io/in/docs/hyper-checkout/web/base-sdk-integration/session](https://juspay.io/in/docs/hyper-checkout/web/base-sdk-integration/session)
-- **Base URL:** `https://api.juspay.in`
+## Where to find this API
 
-#### Tags
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-- Session
-- Checkout
-- HyperSDK
-
-#### Properties
-
-- [Documentation](https://juspay.io/in/docs/hyper-checkout/web/base-sdk-integration/session)
-- [OpenAPI](openapi/juspay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Juspay Refunds API
-
-Create a refund for a `CHARGED` order (`POST /orders/{order_id}/refunds`) with a unique request id and amount. Supports `STANDARD`, `INSTANT`, and `INSTANT_WITH_FALLBACK` refund types depending on payment-source availability.
-
-- **Human URL:** [https://juspay.io/in/docs/api-reference/docs/express-checkout/refund-order-api](https://juspay.io/in/docs/api-reference/docs/express-checkout/refund-order-api)
-- **Base URL:** `https://api.juspay.in`
-
-#### Tags
-
-- Refunds
-- Payments
-- Reconciliation
-
-#### Properties
-
-- [Documentation](https://juspay.io/in/docs/api-reference/docs/express-checkout/refund-order-api)
-- [OpenAPI](openapi/juspay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Juspay Customers API
-
-Create a customer (`POST /customers`) and retrieve one by id (`GET /customers/{customer_id}`). Get/create customer can also mint a 15-minute client auth token used for client-side SDK authentication.
-
-- **Human URL:** [https://juspay.io/in/docs/api-reference/docs/express-checkout/createcustomer](https://juspay.io/in/docs/api-reference/docs/express-checkout/createcustomer)
-- **Base URL:** `https://api.juspay.in`
-
-#### Tags
-
-- Customers
-- Tokenization
-- Client Auth Token
-
-#### Properties
-
-- [Documentation](https://juspay.io/in/docs/api-reference/docs/express-checkout/createcustomer)
-- [API Reference](https://juspay.io/in/docs/api-reference/docs/express-checkout/getcustomer)
-- [OpenAPI](openapi/juspay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-## Common Properties
-
-- [Domain Security](security/juspay-domain-security.yml)
-- [Authentication](authentication/juspay-authentication.yml)
-- [GitHub Organization](https://github.com/juspay)
-- [LinkedIn](https://www.linkedin.com/company/juspay-technologies)
 - [Website](https://juspay.io/in)
 - [Documentation](https://juspay.io/in/docs/api-reference/docs/express-checkout/introduction)
-- [Plans](plans/juspay-plans-pricing.yml)
-- [Rate Limits](rate-limits/juspay-rate-limits.yml)
-- [Fin Ops](finops/juspay-finops.yml)
+- [Blog](https://juspay.io/in/blog)
+- [GitHub](https://github.com/juspay)
 
-## Review
+## API Evangelist rating
 
-A WebSocket review was completed on 2026-07-12: **Juspay does not expose a documented public WebSocket API.** Its public surface is request/response REST (Express Checkout / PG + Hyper Checkout session) with asynchronous payment/refund outcomes delivered via HTTP webhooks. See [review.yml](review.yml).
+**Kin Score 23.8** — emerging · rubric 0.24.0 · scored 2026-10-17
 
-## Maintainers
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 40.2 |
+| Contract governance | 0.0 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 31.0 |
+| Access clarity | 7.9 |
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Agent readiness 19.6** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 10.7** — Payments
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/juspay/](https://apis.io/providers/juspay/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Juspay: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/juspay/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
